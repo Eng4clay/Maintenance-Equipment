@@ -1,0 +1,1543 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>طلب توفير معدات — تجمع جازان الصحي</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    width:100%; min-height:100%;
+    font-family:'Tajawal','Amiri',Tahoma,sans-serif;
+    background:#eaf4f8;
+    color:#1a3a4a;
+    line-height:1.8;
+  }
+
+  /* ============================================
+     ACTION BAR
+     ============================================ */
+  #actionBar {
+    position:sticky; top:0; z-index:1000;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 24px;
+    background:linear-gradient(90deg,#1e5a7a,#2a7fa5,#1e5a7a);
+    color:#fff;
+    box-shadow:0 3px 16px rgba(30,90,122,0.35);
+    flex-wrap:wrap; gap:10px;
+  }
+  #actionBar .info {
+    display:flex; align-items:center; gap:12px;
+    font-size:12.5px;
+  }
+  #actionBar .info .dot {
+    width:8px; height:8px; border-radius:50%;
+    background:#a8dff0;
+    box-shadow:0 0 10px #a8dff0;
+    animation:pulse 1.8s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+  #actionBar .info .txt { color:#d4eaf5; font-weight:600; }
+  #actionBar .info .txt strong { color:#ffffff; }
+
+  #actionBar .buttons { display:flex; gap:8px; flex-wrap:wrap; }
+
+  .ab-btn {
+    display:flex; align-items:center; gap:6px;
+    padding:8px 16px; font-size:12px; font-weight:700; cursor:pointer;
+    background:rgba(255,255,255,0.12);
+    border:1px solid rgba(255,255,255,0.35);
+    border-radius:8px; color:#fff;
+    transition:all .18s; font-family:inherit; white-space:nowrap;
+  }
+  .ab-btn:hover {
+    background:rgba(255,255,255,0.22);
+    border-color:#a8dff0; transform:translateY(-1px);
+  }
+  .ab-btn.white {
+    background:#fff; color:#1e5a7a;
+    border-color:#fff;
+  }
+  .ab-btn.white:hover { background:#f0f8fc; transform:translateY(-1px); }
+  .ab-btn.primary {
+    background:#fff; color:#2a7fa5;
+    border-color:#fff; box-shadow:0 0 12px rgba(255,255,255,0.3);
+  }
+  .ab-btn.primary:hover { background:#e8f5fb; }
+
+  /* ============================================
+     PAPER
+     ============================================ */
+  #paper {
+    max-width:1200px;
+    margin:24px auto 40px;
+    background:#ffffff;
+    box-shadow:0 15px 50px rgba(30,90,122,0.12);
+    border:1px solid #c8dde8;
+    border-radius:6px;
+    overflow:hidden;
+    position:relative;
+  }
+
+  /* ============================================
+     OFFICIAL HEADER — with logo
+     ============================================ */
+  .official-header {
+    position:relative;
+    padding:26px 40px 22px;
+    background:
+      radial-gradient(ellipse at 85% 15%, rgba(120,200,225,0.15), transparent 50%),
+      radial-gradient(ellipse at 15% 85%, rgba(120,200,225,0.12), transparent 50%),
+      linear-gradient(180deg,#ffffff,#f4fafd);
+    border-bottom:1px solid #c8dde8;
+    overflow:hidden;
+  }
+
+  /* Soft decorative waves */
+  .official-header::before {
+    content:'';
+    position:absolute;
+    bottom:0; left:-5%; right:-5%;
+    height:60px;
+    background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 60' preserveAspectRatio='none'><path d='M0,30 Q300,0 600,30 T1200,30 L1200,60 L0,60 Z' fill='%23e6f4fa' opacity='0.7'/><path d='M0,40 Q300,15 600,40 T1200,40 L1200,60 L0,60 Z' fill='%23d0e8f3' opacity='0.5'/></svg>") repeat-x bottom;
+    background-size:100% 60px;
+    pointer-events:none;
+  }
+
+  .header-top {
+    position:relative;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:20px;
+    flex-wrap:wrap;
+    z-index:1;
+  }
+
+  /* Kingdom text block (right in RTL) */
+  .kingdom-block {
+    text-align:right;
+    flex-shrink:0;
+  }
+  .kingdom-block .line1 {
+    font-size:14.5px;
+    font-weight:900;
+    color:#1e5a7a;
+    letter-spacing:.5px;
+  }
+  .kingdom-block .line2 {
+    font-size:11.5px;
+    color:#2a7fa5;
+    font-weight:700;
+    margin-top:3px;
+  }
+  .kingdom-block .line3 {
+    font-size:10.5px;
+    color:#5a8aa0;
+    margin-top:2px;
+  }
+
+  /* Center Logo — Jazan Health Cluster */
+  .cluster-logo {
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .cluster-logo svg {
+    width:130px;
+    height:auto;
+    display:block;
+  }
+
+  /* Left: Hospital name */
+  .hospital-block {
+    text-align:left;
+    flex-shrink:0;
+  }
+  .hospital-block .h-name-ar {
+    font-size:16px;
+    font-weight:900;
+    color:#1e5a7a;
+    letter-spacing:.4px;
+  }
+  .hospital-block .h-name-en {
+    font-size:10.5px;
+    color:#5a8aa0;
+    font-weight:600;
+    margin-top:2px;
+    letter-spacing:.3px;
+  }
+  .hospital-block .h-badge {
+    display:inline-block;
+    margin-top:5px;
+    padding:2px 10px;
+    background:#e6f4fa;
+    color:#2a7fa5;
+    font-size:9.5px;
+    font-weight:800;
+    border-radius:12px;
+    border:1px solid #b8d8e8;
+    letter-spacing:.5px;
+  }
+
+  /* ============================================
+     HOSPITAL BANNER
+     ============================================ */
+  .hospital-banner {
+    position:relative;
+    padding:18px 40px;
+    background:linear-gradient(135deg,#2a7fa5,#1e5a7a);
+    color:#fff;
+    text-align:center;
+    overflow:hidden;
+  }
+  .hospital-banner::before {
+    content:'';
+    position:absolute;
+    inset:0;
+    background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><path d='M100 40 L100 160 M40 100 L160 100' stroke='rgba(255,255,255,0.08)' stroke-width='2' fill='none'/></svg>");
+    background-size:120px 120px;
+    opacity:0.4;
+    pointer-events:none;
+  }
+  .hospital-banner .b-main {
+    position:relative;
+    font-size:22px;
+    font-weight:900;
+    letter-spacing:.8px;
+  }
+  .hospital-banner .b-sub {
+    position:relative;
+    font-size:11px;
+    color:#c0e0f0;
+    margin-top:4px;
+    font-weight:600;
+    letter-spacing:.6px;
+  }
+  .hospital-banner .b-line {
+    position:relative;
+    display:inline-block;
+    width:80px;
+    height:3px;
+    background:#a8dff0;
+    margin-top:8px;
+    border-radius:3px;
+  }
+
+  /* ============================================
+     DOC TITLE + META
+     ============================================ */
+  .doc-title-section {
+    padding:22px 40px 18px;
+    background:#fafdff;
+    border-bottom:1px solid #dceaf2;
+  }
+  .doc-title {
+    text-align:center;
+    font-size:22px;
+    font-weight:900;
+    color:#1e5a7a;
+    letter-spacing:.6px;
+    margin-bottom:5px;
+  }
+  .doc-subtitle {
+    text-align:center;
+    font-size:11px;
+    color:#5a8aa0;
+    letter-spacing:.5px;
+    margin-bottom:18px;
+    font-weight:600;
+    text-transform:uppercase;
+  }
+
+  .meta-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+    gap:8px 20px;
+    font-size:12px;
+    padding:14px 18px;
+    background:#fff;
+    border:1px solid #dceaf2;
+    border-radius:8px;
+  }
+  .meta-item {
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+  }
+  .meta-item .label {
+    color:#5a8aa0;
+    font-weight:700;
+    flex-shrink:0;
+  }
+  .meta-item .value {
+    color:#1e5a7a;
+    font-weight:800;
+    flex:1;
+    border-bottom:1px dotted #b8d8e8;
+    padding-bottom:2px;
+    min-height:20px;
+  }
+  .meta-item .value[contenteditable="true"]:empty:before {
+    content:'...................................';
+    color:#c0d8e0;
+  }
+  .meta-item .value[contenteditable="true"] {
+    outline:none;
+    padding:2px 6px;
+    border-radius:4px;
+    transition:all .15s;
+  }
+  .meta-item .value[contenteditable="true"]:hover {
+    background:#f0f8fc;
+  }
+  .meta-item .value[contenteditable="true"]:focus {
+    background:#e6f4fa;
+    box-shadow:0 0 0 2px #2a7fa5 inset;
+  }
+
+  /* ============================================
+     INTRO TEXT
+     ============================================ */
+  .intro-text {
+    padding:20px 40px;
+    background:#fafdff;
+    border-bottom:1px solid #dceaf2;
+    font-size:13.5px;
+    line-height:1.9;
+    color:#1a3a4a;
+  }
+  .intro-text p { margin-bottom:8px; }
+  .intro-text strong { color:#1e5a7a; font-weight:800; }
+  .intro-text [contenteditable="true"] {
+    outline:none;
+    padding:2px 6px;
+    border-radius:4px;
+    transition:all .15s;
+  }
+  .intro-text [contenteditable="true"]:hover { background:#f0f8fc; }
+  .intro-text [contenteditable="true"]:focus {
+    background:#e6f4fa;
+    box-shadow:0 0 0 2px #2a7fa5 inset;
+  }
+
+  /* ============================================
+     SECTION TITLE
+     ============================================ */
+  .section-title {
+    padding:14px 40px;
+    background:linear-gradient(90deg,#1e5a7a,#2a7fa5);
+    color:#fff;
+    font-size:14px;
+    font-weight:900;
+    letter-spacing:.8px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    position:relative;
+  }
+  .section-title::after {
+    content:'';
+    position:absolute;
+    bottom:0; right:40px;
+    width:60px; height:3px;
+    background:#a8dff0;
+    border-radius:3px;
+  }
+  .section-title .num-badge {
+    width:28px; height:28px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.2);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:13px;
+    font-weight:900;
+    flex-shrink:0;
+    font-family:'Inter',sans-serif;
+    border:2px solid rgba(255,255,255,0.5);
+  }
+
+  /* ============================================
+     EQUIPMENT GRID
+     ============================================ */
+  #equipmentGrid {
+    padding:26px 40px;
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:18px;
+    background:#fff;
+  }
+  @media (max-width: 850px) {
+    #equipmentGrid { grid-template-columns:1fr; padding:18px 20px; }
+  }
+
+  /* ============================================
+     EQUIPMENT CARD
+     ============================================ */
+  .equip-card {
+    border:1.5px solid #c8dde8;
+    border-radius:10px;
+    background:#fafdff;
+    display:flex;
+    overflow:hidden;
+    transition:all .2s;
+    position:relative;
+  }
+  .equip-card:hover {
+    border-color:#2a7fa5;
+    box-shadow:0 4px 18px rgba(42,127,165,0.15);
+  }
+
+  .equip-card .card-num {
+    position:absolute;
+    top:10px; right:10px;
+    width:28px; height:28px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#2a7fa5,#1e5a7a);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+    font-weight:900;
+    z-index:3;
+    font-family:'Inter',sans-serif;
+    border:2px solid #fff;
+    box-shadow:0 2px 8px rgba(42,127,165,0.3);
+  }
+
+  .equip-card .card-delete {
+    position:absolute;
+    top:10px; left:10px;
+    width:24px; height:24px;
+    border-radius:50%;
+    background:rgba(200,60,50,0.9);
+    color:#fff;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    font-size:12px;
+    cursor:pointer;
+    z-index:3;
+    transition:all .15s;
+  }
+  .equip-card:hover .card-delete { display:flex; }
+  .equip-card .card-delete:hover { transform:scale(1.15); background:#e74c3c; }
+
+  .equip-img-area {
+    width:150px;
+    flex-shrink:0;
+    background:linear-gradient(150deg,#e6f4fa,#d0e8f3);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    cursor:pointer;
+    border-left:1px solid #c8dde8;
+    position:relative;
+  }
+  .equip-img-area::before {
+    content:'';
+    position:absolute;
+    inset:8px;
+    border:1.5px dashed #a8d0e0;
+    border-radius:6px;
+    pointer-events:none;
+  }
+  .equip-img-area img {
+    max-width:100%;
+    max-height:100%;
+    object-fit:contain;
+    display:block;
+    padding:12px;
+    position:relative;
+    z-index:1;
+  }
+  .equip-img-area .empty-placeholder {
+    text-align:center;
+    color:#5a8aa0;
+    padding:14px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+    position:relative;
+    z-index:1;
+  }
+  .equip-img-area .empty-placeholder .big-icon {
+    font-size:30px;
+    opacity:0.8;
+  }
+  .equip-img-area .empty-placeholder .txt {
+    font-size:11px;
+    font-weight:800;
+    color:#1e5a7a;
+  }
+  .equip-img-area .empty-placeholder .sub {
+    font-size:9.5px;
+    color:#7aa8c0;
+    font-weight:600;
+  }
+  .equip-img-area input[type="file"] { display:none; }
+
+  .equip-content {
+    flex:1;
+    padding:14px 16px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    min-width:0;
+  }
+
+  .equip-name {
+    width:100%;
+    background:#fff;
+    border:1px solid #c8dde8;
+    border-radius:6px;
+    padding:8px 12px;
+    font-size:13.5px;
+    font-weight:800;
+    color:#1e5a7a;
+    font-family:inherit;
+    outline:none;
+    transition:all .15s;
+  }
+  .equip-name:focus {
+    border-color:#2a7fa5;
+    box-shadow:0 0 0 2px rgba(42,127,165,0.15);
+  }
+  .equip-name::placeholder {
+    color:#a0bcc8;
+    font-weight:500;
+  }
+
+  .equip-desc {
+    width:100%;
+    background:#f8fcff;
+    border:1px solid #dceaf2;
+    border-radius:6px;
+    padding:7px 12px;
+    font-size:11.5px;
+    color:#3a5a6a;
+    font-family:inherit;
+    outline:none;
+    resize:vertical;
+    min-height:52px;
+    line-height:1.6;
+    transition:all .15s;
+  }
+  .equip-desc:focus {
+    border-color:#2a7fa5;
+    background:#fff;
+  }
+  .equip-desc::placeholder { color:#a0bcc8; }
+
+  .equip-qty-row {
+    display:flex;
+    gap:8px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+  .equip-qty-row input {
+    background:#fff;
+    border:1px solid #c8dde8;
+    border-radius:5px;
+    padding:5px 8px;
+    font-size:11px;
+    font-family:inherit;
+    outline:none;
+    color:#1e5a7a;
+    font-weight:700;
+    transition:all .15s;
+  }
+  .equip-qty-row input:focus {
+    border-color:#2a7fa5;
+    box-shadow:0 0 0 2px rgba(42,127,165,0.15);
+  }
+  .equip-qty-row .qty-label {
+    font-size:10.5px;
+    color:#5a8aa0;
+    font-weight:700;
+    flex-shrink:0;
+  }
+  .equip-qty-row .qty-input { width:60px; text-align:center; }
+  .equip-qty-row .unit-input { width:75px; }
+
+  /* ============================================
+     ADD SLOT
+     ============================================ */
+  .add-slot {
+    border:2px dashed #a8d0e0;
+    background:linear-gradient(150deg,#f4fafd,#e6f4fa);
+    border-radius:10px;
+    padding:30px 16px;
+    text-align:center;
+    cursor:pointer;
+    transition:all .2s;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    min-height:150px;
+  }
+  .add-slot:hover {
+    border-color:#2a7fa5;
+    background:linear-gradient(150deg,#e6f4fa,#d0e8f3);
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(42,127,165,0.12);
+  }
+  .add-slot .plus-icon {
+    width:46px;
+    height:46px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#2a7fa5,#1e5a7a);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:24px;
+    border:2px solid #fff;
+    box-shadow:0 3px 14px rgba(42,127,165,0.35);
+  }
+  .add-slot .txt {
+    font-size:13px;
+    font-weight:800;
+    color:#1e5a7a;
+  }
+  .add-slot .sub {
+    font-size:10.5px;
+    color:#5a8aa0;
+    font-weight:600;
+  }
+
+  /* ============================================
+     NOTES
+     ============================================ */
+  .notes-section {
+    padding:20px 40px;
+    background:#fafdff;
+    border-top:1px solid #dceaf2;
+  }
+  .notes-section h4 {
+    font-size:13px;
+    font-weight:900;
+    color:#1e5a7a;
+    margin-bottom:10px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .notes-section h4 .icon {
+    width:24px; height:24px;
+    background:#2a7fa5;
+    color:#fff;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:13px;
+    font-weight:900;
+  }
+  .notes-section ul {
+    list-style:none;
+    padding:0;
+  }
+  .notes-section li {
+    font-size:11.5px;
+    color:#3a5a6a;
+    padding:5px 22px 5px 0;
+    position:relative;
+    line-height:1.75;
+  }
+  .notes-section li::before {
+    content:'◆';
+    position:absolute;
+    right:4px;
+    top:5px;
+    color:#2a7fa5;
+    font-size:9px;
+  }
+
+  /* ============================================
+     SIGNATURES
+     ============================================ */
+  .signatures-grid {
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:20px;
+    padding:28px 40px 32px;
+    background:#fff;
+    border-top:2px solid #2a7fa5;
+  }
+  @media (max-width: 750px) {
+    .signatures-grid { grid-template-columns:1fr; padding:20px; }
+  }
+
+  .sign-block {
+    text-align:center;
+    padding:16px 12px;
+    border:1px solid #dceaf2;
+    border-radius:8px;
+    background:#fafdff;
+    position:relative;
+    overflow:hidden;
+  }
+  .sign-block::before {
+    content:'';
+    position:absolute;
+    top:0; right:0; left:0;
+    height:3px;
+    background:linear-gradient(90deg,#2a7fa5,#1e5a7a);
+  }
+  .sign-block .role {
+    font-size:11.5px;
+    font-weight:900;
+    color:#1e5a7a;
+    margin-bottom:14px;
+    padding-bottom:8px;
+    border-bottom:1px dashed #c8dde8;
+    letter-spacing:.4px;
+  }
+  .sign-block .name-line {
+    font-size:11.5px;
+    color:#5a8aa0;
+    margin-bottom:22px;
+    min-height:18px;
+  }
+  .sign-block .name-line strong {
+    color:#1e5a7a;
+    font-weight:800;
+  }
+  .sign-block .signature-area {
+    height:60px;
+    border-bottom:1.5px dashed #a8d0e0;
+    margin-bottom:6px;
+  }
+  .sign-block .label {
+    font-size:10.5px;
+    color:#5a8aa0;
+    font-weight:700;
+  }
+
+  /* ============================================
+     FOOTER
+     ============================================ */
+  .official-footer {
+    padding:16px 40px;
+    background:linear-gradient(90deg,#1e5a7a,#2a7fa5,#1e5a7a);
+    color:#fff;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:10.5px;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .official-footer .left {
+    color:#c0e0f0;
+    font-weight:600;
+  }
+  .official-footer .center {
+    color:#c0e0f0;
+    font-weight:600;
+  }
+  .official-footer .right {
+    color:#ffffff;
+    font-weight:800;
+    letter-spacing:.5px;
+  }
+
+  /* ============================================
+     TOAST
+     ============================================ */
+  #toast {
+    position:fixed;
+    bottom:30px;
+    left:50%;
+    transform:translate(-50%,20px);
+    padding:12px 26px;
+    font-size:13px;
+    font-weight:700;
+    color:#fff;
+    background:linear-gradient(135deg,rgba(30,90,122,0.96),rgba(20,60,90,0.96));
+    border:1px solid #a8dff0;
+    border-radius:12px;
+    opacity:0;
+    transition:all .35s;
+    pointer-events:none;
+    box-shadow:0 10px 40px rgba(30,90,122,0.4);
+    z-index:10000;
+    text-align:center;
+    max-width:80vw;
+  }
+  #toast.show { opacity:1; transform:translate(-50%,0); }
+  #toast.success { border-color:#7ff0c8; }
+  #toast.error { border-color:#ff9a80; }
+
+  /* ============================================
+     PROGRESS
+     ============================================ */
+  #progress {
+    position:fixed; inset:0; z-index:9999;
+    background:rgba(20,60,90,0.9);
+    display:none; align-items:center; justify-content:center;
+    flex-direction:column; gap:20px;
+  }
+  #progress.show { display:flex; }
+  #progress .spinner {
+    width:64px; height:64px;
+    border:5px solid rgba(168,223,240,0.2);
+    border-top-color:#a8dff0;
+    border-radius:50%;
+    animation:spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  #progress .msg {
+    font-size:14px; font-weight:700; color:#ffffff; letter-spacing:.5px;
+  }
+
+  /* ============================================
+     RESPONSIVE
+     ============================================ */
+  @media (max-width: 640px) {
+    #paper { margin:12px auto; border-radius:0; }
+    .official-header { padding:18px 20px 16px; }
+    .header-top { justify-content:center; text-align:center; }
+    .kingdom-block, .hospital-block { text-align:center; width:100%; }
+    .cluster-logo svg { width:110px; }
+    .hospital-banner { padding:14px 20px; }
+    .hospital-banner .b-main { font-size:17px; }
+    .doc-title-section { padding:16px 20px; }
+    .doc-title { font-size:17px; }
+    .section-title { padding:12px 20px; font-size:12.5px; }
+    #equipmentGrid { padding:16px 14px; gap:12px; }
+    .equip-img-area { width:110px; }
+    .equip-content { padding:10px; }
+    .notes-section { padding:14px 20px; }
+    .signatures-grid { padding:18px 20px; }
+    .official-footer { padding:12px 20px; font-size:9.5px; }
+    #actionBar { padding:8px 12px; }
+    .ab-btn { padding:6px 10px; font-size:11px; }
+  }
+
+  /* ============================================
+     PRINT
+     ============================================ */
+  @media print {
+    #actionBar, #toast, #progress { display:none !important; }
+    body { background:#fff; }
+    #paper {
+      box-shadow:none;
+      border:none;
+      margin:0;
+      max-width:100%;
+    }
+    .equip-card { page-break-inside:avoid; }
+    .signatures-grid { page-break-inside:avoid; }
+    .hospital-banner { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .official-footer { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .section-title { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================
+     ACTION BAR
+     ============================================ -->
+<div id="actionBar">
+  <div class="info">
+    <span class="dot"></span>
+    <span class="txt">نموذج طلب معدات — <strong>تجمع جازان الصحي</strong></span>
+  </div>
+  <div class="buttons">
+    <button class="ab-btn white" id="btnPrint">🖨 طباعة</button>
+    <button class="ab-btn" id="btnSample">📋 تحميل النموذج</button>
+    <button class="ab-btn" id="btnClear">🗑 تفريغ</button>
+    <button class="ab-btn primary" id="btnExportPNG">⬇ حفظ PNG</button>
+    <button class="ab-btn" id="btnExportPDF">📄 حفظ PDF</button>
+  </div>
+</div>
+
+<!-- ============================================
+     PAPER
+     ============================================ -->
+<div id="paper">
+
+  <!-- ===== OFFICIAL HEADER ===== -->
+  <div class="official-header">
+    <div class="header-top">
+
+      <!-- Kingdom (Right) -->
+      <div class="kingdom-block">
+        <div class="line1">المملكة العربية السعودية</div>
+        <div class="line2">وزارة الصحة</div>
+        <div class="line3">تجمع جازان الصحي</div>
+      </div>
+
+      <!-- Center Logo — Jazan Health Cluster SVG -->
+      <div class="cluster-logo">
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="petGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#4a9fbf"/>
+              <stop offset="100%" stop-color="#2a7fa5"/>
+            </linearGradient>
+            <linearGradient id="petGrad2" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#5aafcf"/>
+              <stop offset="100%" stop-color="#3a8faf"/>
+            </linearGradient>
+          </defs>
+
+          <!-- 5 petals — star flower shape -->
+          <g fill="none" stroke="url(#petGrad)" stroke-width="3.5">
+            <!-- Top petal -->
+            <path d="M 100 30 Q 85 55 100 75 Q 115 55 100 30 Z" fill="url(#petGrad2)" stroke="none"/>
+            <path d="M 100 30 Q 85 55 100 75 Q 115 55 100 30 Z" stroke="#2a7fa5" stroke-width="2.5"/>
+
+            <!-- Top-right petal -->
+            <g transform="rotate(72 100 100)">
+              <path d="M 100 30 Q 85 55 100 75 Q 115 55 100 30 Z" fill="url(#petGrad2)" stroke="none"/>
+              <path d="M 100 30 Q 85 55 100 75 Q 115 55 100 30 Z" stroke="#2a7fa5" stroke-width="2.5"/>
+            </g>
+
+            <!-- Bottom-right petal -->
+            <g transform="rotate(144 100 100)">
+              <path d="M 100 30 Q 85 55 100 75 Q 115 55 100 30 Z" fill="url(#petGrad2)" stroke="none"/>
+              <path d="M 100 30 Q 85 55 100 75 Q 115 55 100 30 Z" stroke="#2a7fa5" stroke-width="2.5"/>
+            </g>
+
+            <!-- Bottom-left petal -->
+            <g transform="rotate(216 100 100)">
+              <path d="M 100 30 Q 85 55 100 75 Q 115 55 100 30 Z" fill="url(#petGrad2)" stroke="none"/>
+              <path d="M 100 30 Q 85 55 100 75 Q 115 55 100 30 Z" stroke="#2a7fa5" stroke-width="2.5"/>
+            </g>
+
+            <!-- Top-left petal -->
+            <g transform="rotate(288 100 100)">
+              <path d="M 100 30 Q 85 55 100 75 Q 115 55 100 30 Z" fill="url(#petGrad2)" stroke="none"/>
+              <path d="M 100 30 Q 85 55 100 75 Q 115 55 100 30 Z" stroke="#2a7fa5" stroke-width="2.5"/>
+            </g>
+          </g>
+
+          <!-- Inner decorative eyes/details -->
+          <g fill="none" stroke="#2a7fa5" stroke-width="2">
+            <ellipse cx="100" cy="45" rx="6" ry="9" transform="rotate(0 100 100)"/>
+            <ellipse cx="100" cy="45" rx="6" ry="9" transform="rotate(72 100 100)"/>
+            <ellipse cx="100" cy="45" rx="6" ry="9" transform="rotate(144 100 100)"/>
+            <ellipse cx="100" cy="45" rx="6" ry="9" transform="rotate(216 100 100)"/>
+            <ellipse cx="100" cy="45" rx="6" ry="9" transform="rotate(288 100 100)"/>
+          </g>
+
+          <!-- Center circle -->
+          <circle cx="100" cy="100" r="14" fill="#ffffff" stroke="#2a7fa5" stroke-width="2.5"/>
+          <circle cx="100" cy="100" r="7" fill="#4a9fbf" opacity="0.7"/>
+
+          <!-- Bottom text -->
+          <text x="100" y="175" text-anchor="middle" font-family="'Tajawal',sans-serif" font-size="15" font-weight="900" fill="#2a7fa5">تجمع جازان الصحي</text>
+          <text x="100" y="192" text-anchor="middle" font-family="'Inter',sans-serif" font-size="9.5" font-weight="600" fill="#5a8aa0" letter-spacing="0.5">Jazan Health Cluster</text>
+        </svg>
+      </div>
+
+      <!-- Hospital (Left) -->
+      <div class="hospital-block">
+        <div class="h-name-ar">مستشفى أبو عريش العام</div>
+        <div class="h-name-en">ABU ARISH GENERAL HOSPITAL</div>
+        <div class="h-badge">نموذج طلب معدات</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== HOSPITAL BANNER ===== -->
+  <div class="hospital-banner">
+    <div class="b-main">طلب توفير معدات وأدوات</div>
+    <div class="b-sub">EQUIPMENT & TOOLS REQUISITION FORM</div>
+    <div class="b-line"></div>
+  </div>
+
+  <!-- ===== DOC TITLE + META ===== -->
+  <div class="doc-title-section">
+    <div class="doc-title">بيانات الطلب الرسمية</div>
+    <div class="doc-subtitle">Official Request Information</div>
+
+    <div class="meta-grid">
+      <div class="meta-item">
+        <span class="label">رقم الطلب:</span>
+        <span class="value" contenteditable="true" data-field="req-no"></span>
+      </div>
+      <div class="meta-item">
+        <span class="label">التاريخ:</span>
+        <span class="value" contenteditable="true" data-field="date" id="dateField"></span>
+      </div>
+      <div class="meta-item">
+        <span class="label">القسم / الإدارة:</span>
+        <span class="value" contenteditable="true" data-field="dept"></span>
+      </div>
+      <div class="meta-item">
+        <span class="label">مقدم الطلب:</span>
+        <span class="value" contenteditable="true" data-field="requester"></span>
+      </div>
+      <div class="meta-item">
+        <span class="label">المسمى الوظيفي:</span>
+        <span class="value" contenteditable="true" data-field="position"></span>
+      </div>
+      <div class="meta-item">
+        <span class="label">الرقم الوظيفي:</span>
+        <span class="value" contenteditable="true" data-field="emp-id"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== INTRO TEXT ===== -->
+  <div class="intro-text">
+    <p><strong>المكرم / مدير إدارة المشتريات</strong> — تجمع جازان الصحي،</p>
+    <p><span contenteditable="true">السلام عليكم ورحمة الله وبركاته،</span></p>
+    <p>
+      <span contenteditable="true">بناءً على احتياج قسم الهندسة الطبية والصيانة في مستشفى أبو عريش العام، نتقدم إليكم بطلب توفير المعدات والأدوات المدرجة أدناه، وذلك لاستخدامها في أعمال الصيانة والتركيب لأنظمة التكييف والتبريد في المستشفى. نأمل من سعادتكم التكرم بالاطلاع والموافقة على توفيرها وفق الأنظمة المعمول بها.</span>
+    </p>
+    <p><strong>وتفضلوا بقبول فائق الاحترام والتقدير.</strong></p>
+  </div>
+
+  <!-- ===== SECTION TITLE ===== -->
+  <div class="section-title">
+    <span class="num-badge">١</span>
+    <span>قائمة المعدات والأدوات المطلوبة</span>
+  </div>
+
+  <!-- ===== EQUIPMENT GRID ===== -->
+  <div id="equipmentGrid"></div>
+
+  <!-- ===== NOTES ===== -->
+  <div class="notes-section">
+    <h4><span class="icon">!</span> ملاحظات وإرشادات</h4>
+    <ul>
+      <li>يجب إرفاق صورة توضيحية لكل معدة مع تحديد الاسم والموديل بدقة.</li>
+      <li>يُرجى تحديد الكمية والوحدة (قطعة / طقم / متر / علبة) لكل بند.</li>
+      <li>في حال وجود أكثر من مورد، يُرفق عرض أسعار مقارن قبل الاعتماد.</li>
+      <li>تُطبق جميع إجراءات المنافسة والمشتريات وفقاً لأنظمة وزارة الصحة.</li>
+      <li>الأولوية للمنتجات ذات الجودة المعتمدة وشهادات SASO / SFDA.</li>
+    </ul>
+  </div>
+
+  <!-- ===== SIGNATURES ===== -->
+  <div class="signatures-grid">
+    <div class="sign-block">
+      <div class="role">مقدم الطلب</div>
+      <div class="name-line">الاسم: <strong contenteditable="true">.........................</strong></div>
+      <div class="signature-area"></div>
+      <div class="label">التوقيع</div>
+    </div>
+    <div class="sign-block">
+      <div class="role">رئيس القسم / المشرف</div>
+      <div class="name-line">الاسم: <strong contenteditable="true">.........................</strong></div>
+      <div class="signature-area"></div>
+      <div class="label">التوقيع</div>
+    </div>
+    <div class="sign-block">
+      <div class="role">مدير إدارة المشتريات</div>
+      <div class="name-line">الاسم: <strong contenteditable="true">.........................</strong></div>
+      <div class="signature-area"></div>
+      <div class="label">التوقيع والختم</div>
+    </div>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <div class="official-footer">
+    <div class="left">تجمع جازان الصحي · Jazan Health Cluster</div>
+    <div class="center">مستشفى أبو عريش العام · Abu Arish General Hospital</div>
+    <div class="right">AAH-PUR-001 · Rev. 1.0</div>
+  </div>
+
+</div>
+
+<!-- Progress -->
+<div id="progress">
+  <div class="spinner"></div>
+  <div class="msg">جارٍ تجهيز الملف...</div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ============================================================
+   CONFIG
+   ============================================================ */
+const MAX_ITEMS = 10;
+const STORAGE_KEY = 'abu_arish_equipment_request_v2';
+
+let items = [];
+
+/* ============================================================
+   INIT
+   ============================================================ */
+function init() {
+  const today = new Date();
+  const dateAr = today.toLocaleDateString('ar-SA-u-nu-latn', {
+    year:'numeric', month:'long', day:'numeric'
+  });
+  document.getElementById('dateField').textContent = dateAr;
+
+  loadFromStorage();
+  if (items.length === 0) {
+    items = [
+      { id:'eq-1', image:null, name:'خراطيم شحن الفريون R-410A', desc:'مجموعة خراطيم توصيل غاز التبريد (أزرق، أحمر، أصفر) — 4000 PSI · 1/4 SAE', qty:'3', unit:'طقم' },
+      { id:'eq-2', image:null, name:'مخلاب ثلاثي الأذرع (Gear Puller)', desc:'مخلاب 4YT14 لفك البكرات والرمان بلي — 3 أذرع · دوران 360°', qty:'2', unit:'قطعة' },
+      { id:'eq-3', image:null, name:'طقم أدوات صيانة التكييف', desc:'يشمل: مانيفولد، مفتاح أنابيب، مفتاح إنجليزي، زرادية، مفك كهربائي، شريط قياس، منفاخ', qty:'5', unit:'طقم' },
+      { id:'eq-4', image:null, name:'', desc:'', qty:'', unit:'' }
+    ];
+    saveToStorage();
+  }
+  render();
+}
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+function render() {
+  const grid = document.getElementById('equipmentGrid');
+  grid.innerHTML = '';
+
+  items.forEach((item, idx) => {
+    const card = document.createElement('div');
+    card.className = 'equip-card';
+    card.dataset.id = item.id;
+
+    const hasImage = !!item.image;
+
+    card.innerHTML = `
+      <div class="card-num">${idx + 1}</div>
+      ${hasImage ? `<div class="card-delete" data-delete="${item.id}" title="حذف">✕</div>` : ''}
+
+      <div class="equip-img-area" data-upload="${item.id}">
+        ${hasImage
+          ? `<img src="${item.image}" alt="equipment">`
+          : `<div class="empty-placeholder">
+              <div class="big-icon">📷</div>
+              <div class="txt">اضغط لإرفاق صورة</div>
+              <div class="sub">PNG · JPG · WEBP</div>
+            </div>`
+        }
+        <input type="file" accept="image/*" data-id="${item.id}">
+      </div>
+
+      <div class="equip-content">
+        <input type="text" class="equip-name"
+               placeholder="اسم المعدة المطلوبة..."
+               value="${escapeHtml(item.name || '')}"
+               data-name="${item.id}" maxlength="100">
+
+        <textarea class="equip-desc"
+                  placeholder="وصف / موديل / مواصفات..."
+                  data-desc="${item.id}" maxlength="250">${escapeHtml(item.desc || '')}</textarea>
+
+        <div class="equip-qty-row">
+          <span class="qty-label">الكمية:</span>
+          <input type="text" class="qty-input" placeholder="0"
+                 value="${escapeHtml(item.qty || '')}"
+                 data-qty="${item.id}" maxlength="6">
+          <span class="qty-label">الوحدة:</span>
+          <input type="text" class="unit-input" placeholder="قطعة"
+                 value="${escapeHtml(item.unit || '')}"
+                 data-unit="${item.id}" maxlength="20">
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+
+  if (items.length < MAX_ITEMS) {
+    const addSlot = document.createElement('div');
+    addSlot.className = 'add-slot';
+    addSlot.innerHTML = `
+      <div class="plus-icon">+</div>
+      <div class="txt">إضافة معدة جديدة</div>
+      <div class="sub">${items.length} من ${MAX_ITEMS} — تبقّى ${MAX_ITEMS - items.length}</div>
+    `;
+    addSlot.addEventListener('click', addNewItem);
+    grid.appendChild(addSlot);
+  }
+
+  attachListeners();
+}
+
+function attachListeners() {
+  document.querySelectorAll('[data-upload]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      if (e.target.matches('input')) return;
+      const id = el.dataset.upload;
+      document.querySelector(`input[data-id="${id}"]`).click();
+    });
+  });
+
+  document.querySelectorAll('input[type="file"]').forEach(input => {
+    input.addEventListener('change', handleImageUpload);
+  });
+
+  document.querySelectorAll('[data-name]').forEach(inp => {
+    inp.addEventListener('input', (e) => {
+      const item = items.find(i => i.id === e.target.dataset.name);
+      if (item) { item.name = e.target.value; saveToStorage(); }
+    });
+  });
+  document.querySelectorAll('[data-desc]').forEach(inp => {
+    inp.addEventListener('input', (e) => {
+      const item = items.find(i => i.id === e.target.dataset.desc);
+      if (item) { item.desc = e.target.value; saveToStorage(); }
+    });
+  });
+  document.querySelectorAll('[data-qty]').forEach(inp => {
+    inp.addEventListener('input', (e) => {
+      const item = items.find(i => i.id === e.target.dataset.qty);
+      if (item) { item.qty = e.target.value; saveToStorage(); }
+    });
+  });
+  document.querySelectorAll('[data-unit]').forEach(inp => {
+    inp.addEventListener('input', (e) => {
+      const item = items.find(i => i.id === e.target.dataset.unit);
+      if (item) { item.unit = e.target.value; saveToStorage(); }
+    });
+  });
+
+  document.querySelectorAll('[data-delete]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = btn.dataset.delete;
+      if (confirm('هل تريد حذف هذه المعدة من الطلب؟')) {
+        items = items.filter(i => i.id !== id);
+        saveToStorage();
+        render();
+        toast('تم حذف المعدة', 'success');
+      }
+    });
+  });
+
+  document.querySelectorAll('[data-field]').forEach(el => {
+    el.addEventListener('input', saveMeta);
+  });
+}
+
+/* ============================================================
+   IMAGE
+   ============================================================ */
+function handleImageUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const id = e.target.dataset.id;
+
+  if (!file.type.startsWith('image/')) {
+    toast('الرجاء اختيار ملف صورة صالح', 'error');
+    return;
+  }
+  if (file.size > 5 * 1024 * 1024) {
+    toast('حجم الصورة كبير جداً — الحد الأقصى 5 MB', 'error');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    const item = items.find(i => i.id === id);
+    if (item) {
+      item.image = ev.target.result;
+      saveToStorage();
+      render();
+      toast('✅ تم إرفاق الصورة', 'success');
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+/* ============================================================
+   ADD / CLEAR
+   ============================================================ */
+function addNewItem() {
+  if (items.length >= MAX_ITEMS) {
+    toast('لا يمكن إضافة أكثر من ' + MAX_ITEMS + ' معدات', 'error');
+    return;
+  }
+  const newItem = {
+    id: 'eq-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5),
+    image: null, name: '', desc: '', qty: '', unit: ''
+  };
+  items.push(newItem);
+  saveToStorage();
+  render();
+  setTimeout(() => {
+    const card = document.querySelector(`.equip-card[data-id="${newItem.id}"]`);
+    if (card) {
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      card.querySelector('.equip-name').focus();
+    }
+  }, 100);
+  toast('تمت إضافة بند جديد', 'success');
+}
+
+document.getElementById('btnClear').addEventListener('click', () => {
+  if (!confirm('هل تريد تفريغ جميع البنود؟ سيتم فقدان كل البيانات.')) return;
+  items = [];
+  localStorage.removeItem(STORAGE_KEY);
+  init();
+  toast('تم تفريغ الكل', 'success');
+});
+
+/* ============================================================
+   SAMPLE
+   ============================================================ */
+document.getElementById('btnSample').addEventListener('click', () => {
+  items = [
+    { id:'smp-1', image:null, name:'خراطيم شحن الفريون R-410A', desc:'مجموعة خراطيم توصيل غاز التبريد (أزرق، أحمر، أصفر) — 4000 PSI · 1/4 SAE', qty:'3', unit:'طقم' },
+    { id:'smp-2', image:null, name:'مخلاب ثلاثي الأذرع (Gear Puller)', desc:'مخلاب 4YT14 لفك البكرات والرمان بلي — 3 أذرع · دوران 360°', qty:'2', unit:'قطعة' },
+    { id:'smp-3', image:null, name:'طقم أدوات صيانة التكييف', desc:'يشمل: مانيفولد، مفتاح أنابيب، مفتاح إنجليزي، زرادية، مفك كهربائي، شريط قياس، منفاخ', qty:'5', unit:'طقم' },
+    { id:'smp-4', image:null, name:'مانيفولد قياس الضغط', desc:'Yellow Jacket — صمامات عالية ومنخفضة الضغط', qty:'4', unit:'قطعة' },
+    { id:'smp-5', image:null, name:'مضخة تفريغ (Vacuum Pump)', desc:'VICTOR — لتفريغ الهواء من الدائرة قبل الشحن', qty:'2', unit:'قطعة' },
+    { id:'smp-6', image:null, name:'مفتاح أنابيب (Pipe Wrench)', desc:'مفتاح 14 بوصة — فك وربط الأنابيب', qty:'6', unit:'قطعة' },
+    { id:'smp-7', image:null, name:'مفك كهربائي معزول', desc:'للعمل على الدوائر الكهربائية بأمان', qty:'10', unit:'قطعة' },
+    { id:'smp-8', image:null, name:'شريط قياس 5 متر', desc:'KOMELON — للقياسات الدقيقة', qty:'8', unit:'قطعة' },
+    { id:'smp-9', image:null, name:'منفاخ هواء كهربائي', desc:'لتنظيف الملفات والمكثفات من الغبار', qty:'3', unit:'قطعة' },
+    { id:'smp-10', image:null, name:'زرادية قطع (Cutting Pliers)', desc:'طقم زراديات متنوع — للقص والتثبيت', qty:'12', unit:'قطعة' }
+  ];
+  saveToStorage();
+  render();
+  toast('✅ تم تحميل النموذج — 10 بنود', 'success');
+});
+
+/* ============================================================
+   EXPORT PNG
+   ============================================================ */
+document.getElementById('btnExportPNG').addEventListener('click', async () => {
+  showProgress('جارٍ تجهيز PNG عالية الدقة...');
+  try {
+    const paper = document.getElementById('paper');
+    const clone = paper.cloneNode(true);
+    clone.querySelectorAll('.card-delete, input[type="file"], .add-slot').forEach(el => el.remove());
+
+    clone.querySelectorAll('.equip-name').forEach(inp => {
+      const div = document.createElement('div');
+      div.className = 'equip-name';
+      div.style.cssText = inp.style.cssText;
+      div.style.minHeight = '34px';
+      div.textContent = inp.value || '—';
+      inp.parentNode.replaceChild(div, inp);
+    });
+    clone.querySelectorAll('.equip-desc').forEach(inp => {
+      const div = document.createElement('div');
+      div.className = 'equip-desc';
+      div.style.cssText = inp.style.cssText;
+      div.style.minHeight = '52px';
+      div.textContent = inp.value || '—';
+      inp.parentNode.replaceChild(div, inp);
+    });
+    clone.querySelectorAll('.equip-qty-row input').forEach(inp => {
+      const span = document.createElement('span');
+      span.style.cssText = 'padding:5px 8px; font-size:11px; font-weight:700; color:#1e5a7a; background:#fff; border:1px solid #c8dde8; border-radius:5px;';
+      span.textContent = inp.value || '—';
+      inp.parentNode.replaceChild(span, inp);
+    });
+
+    const temp = document.createElement('div');
+    temp.style.cssText = `
+      position:fixed; left:-99999px; top:0;
+      width:1200px; background:#fff;
+      font-family:'Tajawal','Amiri',Tahoma,sans-serif;
+    `;
+    temp.appendChild(clone);
+    document.body.appendChild(temp);
+    await new Promise(r => setTimeout(r, 500));
+
+    const canvas = await html2canvas(temp, {
+      scale: 3,
+      backgroundColor: '#ffffff',
+      useCORS: true,
+      logging: false,
+      width: 1200,
+      height: temp.offsetHeight
+    });
+
+    document.body.removeChild(temp);
+
+    canvas.toBlob((blob) => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Jazan_Equipment_Request_${Date.now()}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      hideProgress();
+      const sizeMB = (blob.size / (1024 * 1024)).toFixed(1);
+      toast(`✅ تم حفظ PNG (${sizeMB} MB)`, 'success');
+    }, 'image/png', 1.0);
+
+  } catch(err) {
+    console.error(err);
+    hideProgress();
+    toast('خطأ في التصدير: ' + err.message, 'error');
+  }
+});
+
+/* ============================================================
+   EXPORT PDF
+   ============================================================ */
+document.getElementById('btnExportPDF').addEventListener('click', async () => {
+  showProgress('جارٍ تجهيز PDF...');
+  try {
+    const paper = document.getElementById('paper');
+    const clone = paper.cloneNode(true);
+    clone.querySelectorAll('.card-delete, input[type="file"], .add-slot').forEach(el => el.remove());
+
+    clone.querySelectorAll('.equip-name').forEach(inp => {
+      const div = document.createElement('div');
+      div.className = 'equip-name';
+      div.style.cssText = inp.style.cssText;
+      div.style.minHeight = '34px';
+      div.textContent = inp.value || '—';
+      inp.parentNode.replaceChild(div, inp);
+    });
+    clone.querySelectorAll('.equip-desc').forEach(inp => {
+      const div = document.createElement('div');
+      div.className = 'equip-desc';
+      div.style.cssText = inp.style.cssText;
+      div.style.minHeight = '52px';
+      div.textContent = inp.value || '—';
+      inp.parentNode.replaceChild(div, inp);
+    });
+    clone.querySelectorAll('.equip-qty-row input').forEach(inp => {
+      const span = document.createElement('span');
+      span.style.cssText = 'padding:5px 8px; font-size:11px; font-weight:700; color:#1e5a7a; background:#fff; border:1px solid #c8dde8; border-radius:5px;';
+      span.textContent = inp.value || '—';
+      inp.parentNode.replaceChild(span, inp);
+    });
+
+    const temp = document.createElement('div');
+    temp.style.cssText = `
+      position:fixed; left:-99999px; top:0;
+      width:1200px; background:#fff;
+      font-family:'Tajawal','Amiri',Tahoma,sans-serif;
+    `;
+    temp.appendChild(clone);
+    document.body.appendChild(temp);
+    await new Promise(r => setTimeout(r, 500));
+
+    const opt = {
+      margin: [6, 6, 6, 6],
+      filename: `Jazan_Equipment_Request_${Date.now()}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: {
+        scale: 2.5,
+        useCORS: true,
+        backgroundColor: '#ffffff',
+        logging: false
+      },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pagebreak: { mode: ['css', 'legacy'] }
+    };
+
+    await html2pdf().set(opt).from(temp).save();
+    document.body.removeChild(temp);
+    hideProgress();
+    toast('✅ تم تصدير PDF بنجاح', 'success');
+  } catch(err) {
+    console.error(err);
+    hideProgress();
+    toast('خطأ في التصدير: ' + err.message, 'error');
+  }
+});
+
+/* ============================================================
+   PRINT
+   ============================================================ */
+document.getElementById('btnPrint').addEventListener('click', () => {
+  window.print();
+});
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+function showProgress(msg) {
+  document.querySelector('#progress .msg').textContent = msg;
+  document.getElementById('progress').classList.add('show');
+}
+function hideProgress() {
+  document.getElementById('progress').classList.remove('show');
+}
+function toast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = '';
+  if (type) t.classList.add(type);
+  t.classList.add('show');
+  clearTimeout(toast._h);
+  toast._h = setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+/* ============================================================
+   PERSISTENCE
+   ============================================================ */
+function saveMeta() {
+  const meta = {};
+  document.querySelectorAll('[data-field]').forEach(el => {
+    meta[el.dataset.field] = el.textContent;
+  });
+  try {
+    const existing = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    existing.meta = meta;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(existing));
+  } catch(e) {}
+}
+function saveToStorage() {
+  try {
+    const meta = {};
+    document.querySelectorAll('[data-field]').forEach(el => {
+      meta[el.dataset.field] = el.textContent;
+    });
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ items, meta, savedAt: Date.now() }));
+  } catch(e) {
+    console.warn('Save failed:', e);
+    if (e.name === 'QuotaExceededError') {
+      toast('الذاكرة ممتلئة — احذف بعض الصور', 'error');
+    }
+  }
+}
+function loadFromStorage() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return false;
+    const data = JSON.parse(raw);
+    if (data.items && Array.isArray(data.items)) items = data.items;
+    if (data.meta) {
+      Object.keys(data.meta).forEach(k => {
+        const el = document.querySelector(`[data-field="${k}"]`);
+        if (el && data.meta[k]) el.textContent = data.meta[k];
+      });
+    }
+    return true;
+  } catch(e) { return false; }
+}
+
+/* ============================================================
+   START
+   ============================================================ */
+init();
+window.addEventListener('beforeunload', saveToStorage);
+</script>
+
+</body>
+</html>
